@@ -2,7 +2,7 @@
 
 FROM python:3.12-slim
 
-WORKDIR /app
+WORKDIR /var/www
 
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -11,11 +11,11 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-RUN curl -o requirements.txt https://raw.githubusercontent.com/bartb142/stock-dashboard/main/requirements.txt
+RUN git clone https://github.com/bartb142/stock-dashboard.git .
 
 RUN pip3 install -r requirements.txt
 
-COPY . /app
+WORKDIR /var/www/app
 
 EXPOSE 8501
 

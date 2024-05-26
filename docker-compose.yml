@@ -2,8 +2,8 @@ version: "3.8"
 name: stock-dashboard
 services:
   web:
-    image: streamlit:latest
+    image: stock-dashboard:latest
     ports:
       - "8501:8501"
     volumes:
-      - ./app:/app
+      - ./app:/var/www/app
