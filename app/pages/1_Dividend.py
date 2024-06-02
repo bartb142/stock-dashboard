@@ -23,7 +23,19 @@ if util.checkFile('data/stock_dividend.csv'):
     col1,col2 = st.columns(2)
     with col1:
         st.metric(label="Total Dividend", value=f'¥{format(total_dividend,',')}', delta=f'¥{format(this_year_dividend,',')} ({THIS_YEAR}-now)')
-        st.dataframe(df, hide_index=True)
+        st.dataframe(df, hide_index=True,
+                    column_config={
+                        '入金日': st.column_config.DateColumn(
+                            format='YYYY-MM-DD'
+                        ),
+                        '銘柄コード': st.column_config.NumberColumn(
+                            format='%d'
+                        ),
+                        'year': st.column_config.NumberColumn(
+                            format='%d'
+                        )
+                    }
+        )
     with col2:
         st.bar_chart(annual_dividend, x='year',y='dividend',height=550)
 else:
