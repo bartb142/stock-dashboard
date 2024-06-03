@@ -1,15 +1,8 @@
 # app/Dockerfile
 
-FROM python:3.12-slim
+FROM streamlit-custom:latest
 
 WORKDIR /var/www
-
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    curl \
-    software-properties-common \
-    git \
-    && rm -rf /var/lib/apt/lists/*
 
 RUN git clone https://github.com/bartb142/stock-dashboard.git .
 
