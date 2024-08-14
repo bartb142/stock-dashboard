@@ -27,11 +27,21 @@ with col1:
 if util.checkFile('data/stock_records.csv'):
     df = pd.read_csv('data/stock_records.csv')
     df['Total Stock Acquired'] = df['acquired_price'] * df['shares']
+    df['Dividend%'] = (df['dividend_per_share'] / df['acquired_price'] * 100).round(2)
+    df['Annual Dividend'] = df['dividend_per_share'] * df['shares']
+    df.loc[df['account'] != "NISA", 'Annual Dividend'] = df.loc[df['account'] != "NISA", 'Annual Dividend'] * 0.8
+    
+    total_annual_dividend = int(df['Annual Dividend'].sum())
+
+    st.metric(label="Annual Dividend", value=f'¥{format(total_annual_dividend,',')}')
     df = st.data_editor(df,
                         hide_index=True,
                         num_rows='dynamic',
                         column_config={
-                            'stock_code': st.column_config.NumberColumn('Stock Code',format='%d')
+                            'stock_code': st.column_config.NumberColumn('Stock Code',format='%d'),
+                            'Dividend%': st.column_config.NumberColumn('Dividend %',format='%.2f％'),
                         },
                         disabled=['Total Stock Acquired'])
-    df.to_csv('data/stock_records.csv',index=False)
+    if st.button("Update"):
+        df.to_csv('data/stock_records.csv',index=False)
+        st.success('Table is updated!', icon="✅")
