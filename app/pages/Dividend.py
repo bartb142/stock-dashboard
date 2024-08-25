@@ -2,8 +2,6 @@ import pandas as pd
 import streamlit as st
 import util
 
-util.common_page_config()
-
 THIS_YEAR = util.this_year()
 
 # Upload File

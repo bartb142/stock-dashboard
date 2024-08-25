@@ -17,12 +17,6 @@ def checkFile(path):
     file_path = Path(path)
     return file_path.exists()
 
-def common_page_config():
-    st.set_page_config(
-        page_title='Stock Dashboard',
-        layout='wide',
-        page_icon='assets/logo.png'
-    )
 
 #Data Related
 

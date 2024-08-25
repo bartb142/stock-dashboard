@@ -1,7 +1,0 @@
-import pandas as pd
-import streamlit as st
-import util
-
-util.common_page_config()
-
-# Change the file name into No_page name.py and it will be loaded automatically
