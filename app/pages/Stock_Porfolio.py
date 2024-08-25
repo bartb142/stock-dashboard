@@ -20,13 +20,13 @@ with col1:
     if(total_dividend and this_year_dividend):
         st.metric(label="Total Dividend", value=f'¥{format(total_dividend,',')}', delta=f'¥{format(this_year_dividend,',')} ({THIS_YEAR}-now)')
 
-    """
-    # Account details
-    """
-    ACCOUNT_DETAILS = util.ACCOUNT_DETAILS
-    if util.checkFile(ACCOUNT_DETAILS):
-        account_df = pd.read_csv(ACCOUNT_DETAILS)
-        account_df = st.data_editor(account_df, hide_index=True)
+"""
+# Account details
+"""
+ACCOUNT_DETAILS = util.ACCOUNT_DETAILS
+if util.checkFile(ACCOUNT_DETAILS):
+    account_df = pd.read_csv(ACCOUNT_DETAILS)
+    account_df = st.data_editor(account_df, hide_index=True)
 """
 # Stock Portfolio
 """
