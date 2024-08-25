@@ -15,11 +15,18 @@ if util.checkFile('data/stock_dividend.csv'):
     total_dividend = util.get_total_dividend()
     this_year_dividend = util.get_this_year_dividend()
 
-col1,col2,col3,col4 = st.columns(4)
+col1,col2 = st.columns(2)
 with col1:
     if(total_dividend and this_year_dividend):
         st.metric(label="Total Dividend", value=f'¥{format(total_dividend,',')}', delta=f'¥{format(this_year_dividend,',')} ({THIS_YEAR}-now)')
 
+    """
+    # Account details
+    """
+    ACCOUNT_DETAILS = util.ACCOUNT_DETAILS
+    if util.checkFile(ACCOUNT_DETAILS):
+        account_df = pd.read_csv(ACCOUNT_DETAILS)
+        account_df = st.data_editor(account_df, hide_index=True)
 """
 # Stock Portfolio
 """
@@ -41,6 +48,9 @@ if util.checkFile('data/stock_records.csv'):
                             'Dividend%': st.column_config.NumberColumn('Dividend %',format='%.2f％'),
                         },
                         disabled=['Total Stock Acquired'])
-    if st.button("Update"):
-        df.to_csv('data/stock_records.csv',index=False)
-        st.success('Table is updated!', icon="✅")
+
+
+if st.button("Update"):
+    df.to_csv('data/stock_records.csv',index=False)
+    account_df.to_csv(ACCOUNT_DETAILS,index=False)
+    st.success('Table is updated!', icon="✅")

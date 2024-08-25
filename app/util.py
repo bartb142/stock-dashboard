@@ -5,6 +5,7 @@ import pandas as pd
 
 STOCK_DIVIDEND = 'data/stock_dividend.csv'
 INVESTMENT_RECORDS = 'data/investment_records.csv'
+ACCOUNT_DETAILS = 'data/account_details.csv'
 
 
 def this_year():
