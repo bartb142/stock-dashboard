@@ -16,6 +16,7 @@ df = util.load_investment_record()
 annual_investment = util.load_annual_investment()
 this_year_investment = util.load_this_year_investment()
 last_year_investment = util.last_year_investment()
+total_acc_investment = util.total_acc_investment()
 with st.expander('Add new record'):
     with st.form("new_invest_form"):
         in_date = st.date_input('Date')
@@ -31,11 +32,10 @@ with st.expander('Add new record'):
             st.write('submitted!')
 col1,col2 = st.columns(2)
 with col1:
-    sec1,sec2 = st.columns(2)
-    with sec1:
-        st.metric(label=f'This Year ({THIS_YEAR})', value=f'¥{format(this_year_investment,',')}')
-    with sec2:
-        st.metric(label=f'Last Year ({LAST_YEAR})', value=f'¥{format(last_year_investment,',')}')
+    sec1,sec2= st.columns(2)
+    sec1.metric(label=f'This Year ({THIS_YEAR})', value=f'¥{format(this_year_investment,',')}')
+    sec2.metric(label=f'Last Year ({LAST_YEAR})', value=f'¥{format(last_year_investment,',')}')
+
     year_filter = st.multiselect(
         label='Year filter:',
         options=df['Year'].unique(),
@@ -54,4 +54,5 @@ with col1:
                 }
     )
 with col2:
+    st.metric(label=f'Total Investment', value=f'¥{format(total_acc_investment,',')}')
     st.bar_chart(annual_investment, x='Year',y='Amount',height=550)

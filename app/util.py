@@ -48,3 +48,6 @@ def load_this_year_investment():
 def last_year_investment():
     df = load_investment_record()
     return df[df['Year'] == last_year()]['Amount'].sum()
+def total_acc_investment():
+    df = load_investment_record()
+    return df['Amount'].sum()
