@@ -25,7 +25,12 @@ if util.checkFile('data/stock_dividend.csv'):
         """
         ### Dividend Received By Stock
         """
-        dividend_by_code_df = df.groupby(by=['銘柄コード','銘柄'])['dividend'].sum().sort_values(ascending=False)
+        year_filter = st.multiselect(
+            label='Year filter:',
+            options=df['year'].unique(),
+            default=THIS_YEAR
+        )
+        dividend_by_code_df = df.query('year == @year_filter').groupby(by=['銘柄コード','銘柄'])['dividend'].sum().sort_values(ascending=False)
         st.dataframe(dividend_by_code_df,
                     column_config={'銘柄コード': st.column_config.NumberColumn(format='%d'),})
     with col2:
