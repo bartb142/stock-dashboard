@@ -39,7 +39,7 @@ with col1:
     year_filter = st.multiselect(
         label='Year filter:',
         options=df['Year'].unique(),
-        default=THIS_YEAR
+        default=df['year'].max()
     )
     df_filtered = df.query('Year == @year_filter')[['Date','Amount']].sort_values(by='Date',ascending=False)
     st.dataframe(df_filtered,

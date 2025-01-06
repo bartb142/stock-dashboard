@@ -28,7 +28,7 @@ if util.checkFile('data/stock_dividend.csv'):
         year_filter = st.multiselect(
             label='Year filter:',
             options=df['year'].unique(),
-            default=THIS_YEAR
+            default=df['year'].max()
         )
         dividend_by_code_df = df.query('year == @year_filter').groupby(by=['銘柄コード','銘柄'])['dividend'].sum().sort_values(ascending=False)
         st.dataframe(dividend_by_code_df,
