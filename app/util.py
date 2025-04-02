@@ -2,6 +2,8 @@ from pathlib import Path
 from datetime import datetime
 import streamlit as st
 import pandas as pd
+import gspread
+from google.oauth2.service_account import Credentials
 
 STOCK_DIVIDEND = 'data/stock_dividend.csv'
 INVESTMENT_RECORDS = 'data/investment_records.csv'
@@ -52,3 +54,23 @@ def last_year_investment():
 def total_acc_investment():
     df = load_investment_record()
     return df['Amount'].sum()
+
+# Google Sheet related
+# Authenticate with Google Sheets
+def authenticate_gspread():
+    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+    creds = Credentials.from_service_account_file("data/sapient-tangent-382305-5ecc2d4bce4e.json", scopes=scope)
+    return gspread.authorize(creds)
+
+# Load data from Google Sheets
+def load_sheet_data(sheet_url, sheet_name):
+    client = authenticate_gspread()
+    sheet = client.open_by_url(sheet_url).worksheet(sheet_name)
+    data = sheet.get_all_records()
+    return pd.DataFrame(data)
+
+def load_specific_range(sheet_url, sheet_name, range_string):
+    client = authenticate_gspread()
+    sheet = client.open_by_url(sheet_url).worksheet(sheet_name)
+    data = sheet.get(range_string)
+    return pd.DataFrame.from_dict(data)

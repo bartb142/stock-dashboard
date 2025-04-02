@@ -23,34 +23,44 @@ with col1:
 """
 # Account details
 """
-ACCOUNT_DETAILS = util.ACCOUNT_DETAILS
-if util.checkFile(ACCOUNT_DETAILS):
-    account_df = pd.read_csv(ACCOUNT_DETAILS)
-    account_df = st.data_editor(account_df, hide_index=True)
+def get_account_metrics():
+    SHEET_URL = "https://docs.google.com/spreadsheets/d/1Wyd6NrRmjeuByDffQOC_OCwD9GsYIYe6bUn07Tjkgm4"
+    SHEET_NAME = "streamlit_metrics"
+    df = util.load_sheet_data(SHEET_URL, SHEET_NAME)
+    df.to_csv('data/account_metrics.csv',index=False)
+
+if util.checkFile('data/account_metrics.csv'):
+    metrics_df = pd.read_csv('data/account_metrics.csv')
+    MAX_COLUMNS = 4
+    columns = st.columns(MAX_COLUMNS) # create 4 columns
+    for idx, label in enumerate(metrics_df.columns):
+        col = columns[idx % MAX_COLUMNS]
+        col.metric(label=label, value=str(metrics_df[label][0]))
+
+
 """
 # Stock Portfolio
 """
+def get_stock_records():
+    SHEET_URL = "https://docs.google.com/spreadsheets/d/1Wyd6NrRmjeuByDffQOC_OCwD9GsYIYe6bUn07Tjkgm4"
+    SHEET_NAME = "Bart"
+    df = util.load_sheet_data(SHEET_URL, SHEET_NAME)
+    df = df[0:11] # get the range to 11th row
+    df.to_csv('data/stock_records.csv',index=False)
+
 if util.checkFile('data/stock_records.csv'):
     df = pd.read_csv('data/stock_records.csv')
-    df['Total Stock Acquired'] = df['acquired_price'] * df['shares']
-    df['Dividend%'] = (df['dividend_per_share'] / df['acquired_price'] * 100).round(2)
-    df['Annual Dividend'] = df['dividend_per_share'] * df['shares']
-    df.loc[df['account'] != "NISA", 'Annual Dividend'] = df.loc[df['account'] != "NISA", 'Annual Dividend'] * 0.8
-    
-    total_annual_dividend = int(df['Annual Dividend'].sum())
-
-    st.metric(label="Annual Dividend", value=f'¥{format(total_annual_dividend,',')}')
-    df = st.data_editor(df,
-                        hide_index=True,
-                        num_rows='dynamic',
-                        column_config={
-                            'stock_code': st.column_config.NumberColumn('Stock Code',format='%d'),
-                            'Dividend%': st.column_config.NumberColumn('Dividend %',format='%.2f％'),
-                        },
-                        disabled=['Total Stock Acquired'])
+    # st.metric(label="Annual Dividend", value=f'¥{format(total_annual_dividend,',')}')
+    st.dataframe(df,
+                 hide_index=True,
+                 column_config={
+                    'stock_code': st.column_config.NumberColumn('Stock Code',format='%d'),
+                    'Dividend%': st.column_config.NumberColumn('Dividend %',format='%.2f％'),
+                        })
 
 
 if st.button("Update"):
-    df.to_csv('data/stock_records.csv',index=False)
-    account_df.to_csv(ACCOUNT_DETAILS,index=False)
+    get_stock_records()
+    get_account_metrics()
+    st.rerun()
     st.success('Table is updated!', icon="✅")
