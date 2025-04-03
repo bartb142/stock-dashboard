@@ -1,6 +1,7 @@
 import pandas as pd
 import streamlit as st
 import util
+import plotly.express as px
 
 
 THIS_YEAR = util.this_year()
@@ -50,17 +51,25 @@ def get_stock_records():
 
 if util.checkFile('data/stock_records.csv'):
     df = pd.read_csv('data/stock_records.csv')
-    # st.metric(label="Annual Dividend", value=f'¥{format(total_annual_dividend,',')}')
+
+    # Data for Stock Holding share pie chart
+    df_stock = df[['stock name','total stock acquired']]
+    df_stock['total stock acquired'] = df_stock['total stock acquired'].str.replace('¥','')
+    df_stock['total stock acquired'] = df_stock['total stock acquired'].str.replace(',','')
+    df_stock['total stock acquired'] = df_stock['total stock acquired'].astype(int)
+    df_stock = df_stock.groupby(by='stock name', as_index=False).sum()
+    fig = px.pie(df_stock, names='stock name', values='total stock acquired', title="Stock Holdings Share")
     st.dataframe(df,
                  hide_index=True,
                  column_config={
                     'stock_code': st.column_config.NumberColumn('Stock Code',format='%d'),
                     'Dividend%': st.column_config.NumberColumn('Dividend %',format='%.2f％'),
                         })
+    st.plotly_chart(fig)
 
-
-if st.button("Update"):
-    get_stock_records()
-    get_account_metrics()
-    st.rerun()
-    st.success('Table is updated!', icon="✅")
+with st.sidebar:
+    if st.button("Update"):
+        get_stock_records()
+        get_account_metrics()
+        st.rerun()
+        st.success('Table is updated!', icon="✅")
