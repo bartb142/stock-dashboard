@@ -27,6 +27,7 @@ def checkFile(path):
 def load_stock_dividend():
     df = pd.read_csv(STOCK_DIVIDEND, parse_dates=['入金日'])
     df['year'] = df['入金日'].dt.year
+    df['month'] = df['入金日'].dt.month
     df['dividend'] = df['受取金額[円/現地通貨]'].str.replace(',','').astype(int)
     return df
 

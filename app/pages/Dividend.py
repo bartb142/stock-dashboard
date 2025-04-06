@@ -37,6 +37,16 @@ if util.checkFile('data/stock_dividend.csv'):
         st.bar_chart(annual_dividend, x='year',y='dividend',height=550)
     
     """
+    ### Monthly Dividend
+    """
+    md_filter = st.multiselect(
+            label='Year:',
+            options=df['year'].unique(),
+            default=df['year'].max()
+    )
+    monthly_dividend = df[['year','month','dividend']].query('year == @md_filter').groupby('month',as_index=False).sum()
+    st.bar_chart(monthly_dividend, x='month',y='dividend')
+    """
     ### Dividend Records
     """
     st.dataframe(df, hide_index=True,
