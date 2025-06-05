@@ -5,9 +5,11 @@ import util
 THIS_YEAR = util.this_year()
 
 # Upload File
-uploaded_file = st.file_uploader("Choose a file",type=['csv'])
+uploaded_file = st.file_uploader("Choose a file (Full data)",type=['csv'])
 if(uploaded_file is not None):
-    pd.read_csv(uploaded_file).to_csv('data/stock_dividend.csv',index=False)
+    pd.read_csv(uploaded_file,encoding='shift_jis').to_csv('data/stock_dividend.csv',index=False, encoding='UTF8')
+    uploaded_file = None
+    st.rerun()
 
 """
 # Dividend Dashboard
