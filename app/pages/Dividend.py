@@ -32,7 +32,7 @@ if util.checkFile('data/stock_dividend.csv'):
             options=df['year'].unique(),
             default=df['year'].max()
         )
-        dividend_by_code_df = df.query('year == @year_filter').groupby(by=['銘柄コード','銘柄'])['dividend'].sum().sort_values(ascending=False)
+        dividend_by_code_df = df.query('year == @year_filter').groupby(by=['銘柄コード','銘柄','month'])['dividend'].sum().sort_values(ascending=False)
         st.dataframe(dividend_by_code_df,
                     column_config={'銘柄コード': st.column_config.NumberColumn(format='%d'),})
     with col2:
