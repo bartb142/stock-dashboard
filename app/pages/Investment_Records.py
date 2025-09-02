@@ -27,9 +27,17 @@ with st.expander('Add new record'):
             in_record = f'\n{in_date},{in_amount},{in_year}'
             with open(INVESTMENT_RECORDS, 'at') as f:
                 f.write(in_record)
+            
+            sheet_url = 'https://docs.google.com/spreadsheets/d/1Wyd6NrRmjeuByDffQOC_OCwD9GsYIYe6bUn07Tjkgm4'
+            total_acc_investment = util.total_acc_investment()
+            this_year_investment = util.load_this_year_investment()
+            # update this year investment
+            util.update_cell(sheet_url, 'Plan', 'K4', int(this_year_investment))
+            # update total investment
+            util.update_cell(sheet_url, 'Bart', 'D22', int(total_acc_investment))
+            
             st.rerun()
-            st.write(in_record)
-            st.write('submitted!')
+
 col1,col2 = st.columns(2)
 with col1:
     sec1,sec2= st.columns(2)

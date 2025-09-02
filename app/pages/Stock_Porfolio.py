@@ -72,4 +72,4 @@ with st.sidebar:
         get_stock_records()
         get_account_metrics()
         st.rerun()
-        st.success('Table is updated!', icon="✅")
+        st.toast('Table is updated!', icon="✅")

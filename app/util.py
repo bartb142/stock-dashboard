@@ -75,3 +75,18 @@ def load_specific_range(sheet_url, sheet_name, range_string):
     sheet = client.open_by_url(sheet_url).worksheet(sheet_name)
     data = sheet.get(range_string)
     return pd.DataFrame.from_dict(data)
+
+# Update a specific cell in Google Sheets
+def update_cell(sheet_url, sheet_name, cell, value):
+    """
+    Update a specific cell in a Google Sheet.
+
+    Args:
+        sheet_url (str): URL of the Google Sheet
+        sheet_name (str): Name of the worksheet/tab
+        cell (str): Cell reference (e.g., "B2")
+        value (str/int/float): Value to set in the cell
+    """
+    client = authenticate_gspread()
+    sheet = client.open_by_url(sheet_url).worksheet(sheet_name)
+    sheet.update_acell(cell, value)
