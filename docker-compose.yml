@@ -1,12 +1,12 @@
-version: "3.8"
 name: stock-dashboard
 services:
   web:
     build:
       context: .
-      dockerfile: app/Dockerfile
+      dockerfile: Dockerfile
     container_name: stock-dashboard
     hostname: stock-dashboard
+    command: ["streamlit", "run", "Home.py", "--server.port=8501", "--server.address=0.0.0.0"]
     ports:
       - 8501:8501
     volumes:
