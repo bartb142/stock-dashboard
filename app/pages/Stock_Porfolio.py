@@ -46,7 +46,7 @@ def get_stock_records():
     SHEET_URL = "https://docs.google.com/spreadsheets/d/1Wyd6NrRmjeuByDffQOC_OCwD9GsYIYe6bUn07Tjkgm4"
     SHEET_NAME = "Bart"
     df = util.load_sheet_data(SHEET_URL, SHEET_NAME)
-    df = df[0:11] # get the range to 11th row
+    df = df[0:12] # get the range to 11th row
     df.to_csv('data/stock_records.csv',index=False)
 
 if util.checkFile('data/stock_records.csv'):
