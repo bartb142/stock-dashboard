@@ -53,7 +53,7 @@ if util.checkFile('data/stock_records.csv'):
     df = pd.read_csv('data/stock_records.csv')
 
     # Data for Stock Holding share pie chart
-    df_stock = df[['stock name','total stock acquired']]
+    df_stock = df[['stock name','total stock acquired']].copy()
     df_stock['total stock acquired'] = df_stock['total stock acquired'].str.replace('¥','')
     df_stock['total stock acquired'] = df_stock['total stock acquired'].str.replace(',','')
     df_stock['total stock acquired'] = df_stock['total stock acquired'].astype(int)
