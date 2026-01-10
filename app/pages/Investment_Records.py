@@ -32,9 +32,9 @@ with st.expander('Add new record'):
             total_acc_investment = util.total_acc_investment()
             this_year_investment = util.load_this_year_investment()
             # update this year investment
-            util.update_cell(sheet_url, 'Plan', 'K4', int(this_year_investment))
+            util.update_cell(sheet_url, 'Plan', 'L4', int(this_year_investment))
             # update total investment
-            util.update_cell(sheet_url, 'Bart', 'D22', int(total_acc_investment))
+            util.update_cell(sheet_url, 'Bart', 'D24', int(total_acc_investment))
             
             st.rerun()
 
