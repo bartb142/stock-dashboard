@@ -54,18 +54,23 @@ if util.checkFile('data/stock_records.csv'):
     df = pd.read_csv('data/stock_records.csv')
 
     # Data for Stock Holding share pie chart
-    df_stock = df[['stock name','total stock acquired']].copy()
+    df_stock = df[['stock name','account','total stock acquired']].copy()
     df_stock['total stock acquired'] = df_stock['total stock acquired'].str.replace('¥','')
     df_stock['total stock acquired'] = df_stock['total stock acquired'].str.replace(',','')
     df_stock['total stock acquired'] = df_stock['total stock acquired'].astype(int)
-    df_stock = df_stock.groupby(by='stock name', as_index=False).sum()
-    fig = px.pie(df_stock, names='stock name', values='total stock acquired', title="Stock Holdings Share")
+    df_stock = df_stock.groupby(by=['stock name','account'], as_index=False).sum()
     st.dataframe(df,
                  hide_index=True,
                  column_config={
                     'stock_code': st.column_config.NumberColumn('Stock Code',format='%d'),
                     'Dividend%': st.column_config.NumberColumn('Dividend %',format='%.2f％'),
                         })
+    account_filter = st.multiselect(
+            label='Account:',
+            options=['NISA','特定'],
+            default=['NISA','特定']
+    )
+    fig = px.pie(df_stock.query('account == @account_filter'), names='stock name', values='total stock acquired', title="Stock Holdings Share")
     st.plotly_chart(fig)
 
 with st.sidebar:
