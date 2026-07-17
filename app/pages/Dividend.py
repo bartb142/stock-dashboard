@@ -5,14 +5,25 @@ import util
 THIS_YEAR = util.this_year()
 
 # Upload File
-uploaded_file = st.file_uploader("Choose a file (Full data)",type=['csv'])
-if(uploaded_file is not None):
-    try:
-        pd.read_csv(uploaded_file,encoding='shift_jis').to_csv('data/stock_dividend.csv',index=False, encoding='UTF8')
-    except UnicodeDecodeError:
-        pd.read_csv(uploaded_file,encoding='UTF8').to_csv('data/stock_dividend.csv',index=False, encoding='UTF8')
-    uploaded_file = None
-    st.rerun()
+uploaded_file = st.file_uploader("Choose a file (Full data)", type=['csv'])
+if uploaded_file is not None:
+    encodings = ['utf-8-sig', 'cp932', 'shift_jis']
+    df = None
+    for encoding in encodings:
+        try:
+            uploaded_file.seek(0)
+            df = pd.read_csv(uploaded_file, encoding=encoding)
+            break
+        except UnicodeDecodeError:
+            continue
+
+    if df is not None:
+        df.to_csv('data/stock_dividend.csv', index=False, encoding='utf-8')
+        uploaded_file = None
+        st.rerun()
+    else:
+        st.error("Failed to decode the CSV file. Please make sure the file is in UTF-8 or Shift_JIS/CP932 encoding.")
+
 
 """
 # Dividend Dashboard
