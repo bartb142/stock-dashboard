@@ -4,8 +4,17 @@ import util
 
 THIS_YEAR = util.this_year()
 
+# Initialize session state for file uploader key to allow resetting it
+if 'uploader_key' not in st.session_state:
+    st.session_state.uploader_key = 0
+
 # Upload File
-uploaded_file = st.file_uploader("Choose a file (Full data)", type=['csv'])
+uploaded_file = st.file_uploader(
+    "Choose a file (Full data)", 
+    type=['csv'], 
+    key=f"uploader_{st.session_state.uploader_key}"
+)
+
 if uploaded_file is not None:
     encodings = ['utf-8-sig', 'cp932', 'shift_jis']
     df = None
@@ -19,10 +28,12 @@ if uploaded_file is not None:
 
     if df is not None:
         df.to_csv('data/stock_dividend.csv', index=False, encoding='utf-8')
-        uploaded_file = None
+        # Reset the file uploader by changing its key
+        st.session_state.uploader_key += 1
         st.rerun()
     else:
         st.error("Failed to decode the CSV file. Please make sure the file is in UTF-8 or Shift_JIS/CP932 encoding.")
+
 
 
 """
