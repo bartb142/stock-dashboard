@@ -27,6 +27,7 @@ if uploaded_file is not None:
             continue
 
     if df is not None:
+        df = df.rename(columns={'入金日(受渡日)': '入金日'})
         df.to_csv('data/stock_dividend.csv', index=False, encoding='utf-8')
         # Reset the file uploader by changing its key
         st.session_state.uploader_key += 1

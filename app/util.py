@@ -25,10 +25,13 @@ def checkFile(path):
 
 # Dividend Dashboard
 def load_stock_dividend():
-    df = pd.read_csv(STOCK_DIVIDEND, parse_dates=['入金日'])
+    df = pd.read_csv(STOCK_DIVIDEND)
+    df = df.rename(columns={'入金日(受渡日)': '入金日'})
+    amount_col = '受取金額(税引後)[円/現地通貨]' if '受取金額(税引後)[円/現地通貨]' in df.columns else '受取金額[円/現地通貨]'
+    df['入金日'] = pd.to_datetime(df['入金日'])
     df['year'] = df['入金日'].dt.year
     df['month'] = df['入金日'].dt.month
-    df['dividend'] = df['受取金額[円/現地通貨]'].str.replace(',','').astype(int)
+    df['dividend'] = df[amount_col].astype(str).str.replace(',', '').astype(int)
     return df
 
 def get_total_dividend():
